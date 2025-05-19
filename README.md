@@ -11,7 +11,9 @@ Frontend Application: React-based web interface for user interaction
 RabbitMQ Message Queue: Handles asynchronous processing of orders
 Worker Service: Processes orders from the message queue
 Redis Cache: Improves performance by caching frequently accessed product data
+
 Architecture Diagram
+
                    +-------------+
                    |   Frontend  |
                    +------+------+
@@ -32,6 +34,7 @@ Architecture Diagram
                    +------+------+
                    |    Worker   |
                    +-------------+
+                   
 Setup Instructions
 Prerequisites
 Docker and Docker Compose installed on your machine
