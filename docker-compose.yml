@@ -1,0 +1,141 @@
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:14
+    container_name: bakery-db
+    environment:
+      POSTGRES_DB: bakery
+      POSTGRES_USER: baker
+      POSTGRES_PASSWORD: secret_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U baker -d bakery"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - bakery-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 500M
+
+  # RabbitMQ Message Queue
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: bakery-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - bakery-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 500M
+
+  # Redis for Caching (Advanced Feature 1)
+  redis:
+    image: redis:6
+    container_name: bakery-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - bakery-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 300M
+
+  # Backend API Service
+  backend:
+    build: ./backend
+    container_name: bakery-backend
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://baker:secret_password@db:5432/bakery
+      RABBITMQ_HOST: rabbitmq
+      REDIS_HOST: redis
+      FLASK_ENV: production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - bakery-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 500M
+
+  # Order Processing Worker (Advanced Feature 2)
+  worker:
+    build: ./worker
+    container_name: bakery-worker
+    depends_on:
+      - rabbitmq
+      - db
+    environment:
+      DATABASE_URL: postgresql://baker:secret_password@db:5432/bakery
+      RABBITMQ_HOST: rabbitmq
+    restart: unless-stopped
+    networks:
+      - bakery-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 300M
+
+  # Frontend Web Application
+  frontend:
+    build: ./frontend
+    container_name: bakery-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - bakery-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 300M
+
+networks:
+  bakery-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

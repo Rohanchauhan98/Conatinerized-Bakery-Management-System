@@ -1,0 +1,129 @@
+/* OrderStatus.css */
+.order-status {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+  }
+  
+  .status-banner {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+  
+  .status-indicator {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border-radius: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+  }
+  
+  .status-pending {
+    background-color: #fff3e0;
+    color: #e65100;
+  }
+  
+  .status-processing {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+  }
+  
+  .status-completed {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+  }
+  
+  .status-cancelled {
+    background-color: #fbe9e7;
+    color: #bf360c;
+  }
+  
+  .order-details {
+    margin: 2rem 0;
+    border: 1px solid #f5f5f5;
+    border-radius: 6px;
+    padding: 1.5rem;
+  }
+  
+  .order-info {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  
+  .order-info p {
+    margin: 0.5rem 0;
+    color: #616161;
+  }
+  
+  .order-items {
+    margin-bottom: 1.5rem;
+  }
+  
+  .order-items h3 {
+    margin-top: 0;
+    color: #5d4037;
+  }
+  
+  .order-items ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .order-items li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  
+  .order-items li:last-child {
+    border-bottom: none;
+  }
+  
+  .order-total {
+    text-align: right;
+    font-size: 1.2rem;
+    color: #4e342e;
+    padding-top: 1rem;
+    border-top: 1px dashed #e0e0e0;
+  }
+  
+  .status-message {
+    margin: 2rem 0;
+    padding: 1rem;
+    border-radius: 6px;
+    background-color: #f5f5f5;
+    text-align: center;
+  }
+  
+  .status-message.success {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+  }
+  
+  .loading-spinner {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #8d6e63;
+    animation: spin 1s ease-in-out infinite;
+    margin-top: 1rem;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  @media (max-width: 768px) {
+    .order-status {
+      padding: 1.5rem;
+    }
+  }
