@@ -242,9 +242,6 @@ docker-compose -f docker-compose.yml -f docker-compose.test.yml up
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Author
-
-Your Name
 
 ## Acknowledgments
 
